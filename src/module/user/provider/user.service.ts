@@ -8,9 +8,14 @@ import { NoDataError } from 'src/type/error/Common'
 export class UserService {
   constructor (
     @InjectRepository(UserRepository)
-    private readonly userRepository: UserRepository // 수정
+    private readonly userRepository: UserRepository
   ) {}
 
+  /**
+   * 내 정보 조회
+   * @param userId `number`
+   * @returns `Promise<UserResponse>s`
+   */
   getUser = async (userId: number): Promise<UserResponse> => {
     const user = await this.userRepository.getUser(userId)
 

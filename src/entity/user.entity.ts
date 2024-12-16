@@ -1,3 +1,4 @@
+import { TGenderType } from 'src/type/user/GenderType'
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -33,7 +34,7 @@ export class User {
     phoneNumber: string | null
 
   @Column('varchar', { name: 'gender', nullable: true, length: 45 })
-    gender: string | null
+    gender: TGenderType | null
 
   @CreateDateColumn()
     createdAt: Date

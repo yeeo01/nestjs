@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import * as path from 'path'
 import { UserModule } from './module/user/user.module'
+import { AuthModule } from './module/auth/auth.module'
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { UserModule } from './module/user/user.module'
       entities: [path.join(__dirname, '/**/entity/**/*{.ts,.js}')],
       synchronize: true
     }),
+    AuthModule,
     UserModule
   ]
 })

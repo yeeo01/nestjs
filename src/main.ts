@@ -9,11 +9,14 @@ async function bootstrap () {
   const config = new DocumentBuilder()
     .setTitle('Yejin-Nest')
     .setDescription('Yejin-Nest-Learning')
+    .addTag('Auth', '인증')
     .addTag('User', '사용자')
     .build()
 
   const document = SwaggerModule.createDocument(app, config)
-  SwaggerModule.setup('api', app, document)
+  SwaggerModule.setup('api', app, document, {
+    customSiteTitle: 'Yejin Custom Swagger'
+  })
 
   await app.listen(3000)
 }

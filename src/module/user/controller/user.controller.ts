@@ -2,21 +2,9 @@ import {
   ApiBearerAuth,
   ApiOkResponse,
   ApiOperation,
-  ApiProperty,
   ApiTags
 } from '@nestjs/swagger'
-import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  Param,
-  Patch,
-  Post,
-  Put,
-  Query,
-  Version
-} from '@nestjs/common'
+import { Controller, Get, Query } from '@nestjs/common'
 import { UserService } from '../provider/user.service'
 import { UserResponse } from 'src/responser/user.response'
 import { InsufficientScope } from 'src/type/error/Common'
@@ -28,7 +16,7 @@ import { InsufficientScope } from 'src/type/error/Common'
   version: '1'
 })
 export class UserController {
-  constructor (private userService: UserService) {}
+  constructor (private readonly userService: UserService) {}
 
   @ApiOperation({
     summary: '내 정보'
