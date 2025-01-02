@@ -31,9 +31,9 @@ export class UserRepository extends Repository<User> {
    * @param userId `number`
    * @returns `Promise<User | undefined>`
    */
-  getUser = async (userId: number): Promise<User | undefined> => {
+  getUser = async (id: number): Promise<User | undefined> => {
     return this.findOne({
-      where: { id: userId }
+      where: { id }
     })
   }
 }
