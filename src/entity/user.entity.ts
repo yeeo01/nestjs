@@ -13,7 +13,7 @@ export class User {
   @PrimaryGeneratedColumn()
     id: number
 
-  @Column('varchar', { name: 'signin_id', length: 100 })
+  @Column('varchar', { name: 'signin_id', length: 100, unique: true })
     signinId: string
 
   @Column('varchar', { name: 'password', length: 100 })
@@ -36,7 +36,7 @@ export class User {
   @Column('varchar', { name: 'gender', nullable: true, length: 45 })
     gender: TGenderType | null
 
-  @CreateDateColumn()
+  @CreateDateColumn({ name: 'created_at' })
     createdAt: Date
 
   @UpdateDateColumn()

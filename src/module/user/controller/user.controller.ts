@@ -26,11 +26,11 @@ export class UserController {
     type: UserResponse
   })
   @Get()
-  getUserController (@Query('userId') userId: number) {
-    if (!userId) {
+  getUserController (@Query('userId') id: number) {
+    if (!id) {
       throw InsufficientScope
     }
 
-    return this.userService.getUser(userId)
+    return this.userService.getUser(id)
   }
 }

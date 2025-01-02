@@ -16,8 +16,8 @@ export class UserService {
    * @param userId `number`
    * @returns `Promise<UserResponse>s`
    */
-  getUser = async (userId: number): Promise<UserResponse> => {
-    const user = await this.userRepository.getUser(userId)
+  getUser = async (id: number): Promise<UserResponse> => {
+    const user = await this.userRepository.getUser(id)
 
     if (!user) {
       throw NoDataError
