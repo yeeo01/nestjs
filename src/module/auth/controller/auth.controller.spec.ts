@@ -3,17 +3,17 @@ import { ConfigModule } from '@nestjs/config'
 import { AuthModule } from '../auth.module'
 import { AuthController } from './auth.controller'
 import { UserRepository } from 'src/repository/user.repository'
-import { User } from 'src/entity/user.entity'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { SignupBodyDto } from '../dto/signup.dto'
 import { db } from 'src/config/db.config'
+import { UserResponse } from 'src/responser/user.response'
 
 describe('AuthController', () => {
   let app: TestingModule
   let authController: AuthController
   let userRepository: UserRepository
 
-  let user: User
+  let user: UserResponse
 
   beforeAll(async () => {
     app = await Test.createTestingModule({
@@ -35,7 +35,7 @@ describe('AuthController', () => {
    */
   it('/POST /v1/signup', async () => {
     const body: SignupBodyDto = {
-      signinId: 'test',
+      signinId: `test-${Date.now()}`, // 고유한 signinId 사용
       password: 'test123',
       name: '회원가입 테스트',
       email: 'email@email.email',
@@ -43,26 +43,26 @@ describe('AuthController', () => {
       gender: 'FEMALE'
     }
 
+    // 컨트롤러 호출
     const result = await authController.postSignupController(body)
 
-    const createdUser = await userRepository.getUser(result.id)
-    if (createdUser) {
-      user = createdUser
-    }
+    // 요청한 바디 값대로 회원가입이 이루어졌는지 검증
+    expect(result).toBeDefined()
+    expect(result.signinId).toEqual(body.signinId)
+    expect(result.name).toEqual(body.name)
+    expect(result.email).toEqual(body.email)
+    expect(result.phoneNumber).toEqual(body.phoneNumber)
+    expect(result.gender).toEqual(body.gender)
 
-    // 사용자 정보 테스트
-    expect(user).toBeDefined()
-    expect(user.id).toEqual(result.id)
-    expect(user.signinId).toEqual(body.signinId)
-
-    // 로그인 정상 작동 테스트
-    //
+    // user 변수에 결과 저장
+    user = result
   })
 
   afterAll(async () => {
-    // 생성된 데이터 제거
-    await Promise.all([userRepository.delete(user.id)])
-
+    // 생성된 데이터가 존재하는지 확인하고, 존재하면 삭제
+    if (user && user.id) {
+      await userRepository.softDelete(user.id)
+    }
     await app.close()
   })
 })
