@@ -1,5 +1,7 @@
 import { User } from 'src/entity/user.entity'
 import { SignupBodyDto } from 'src/module/auth/dto/signup.dto'
+import { UpdateUserBodyDto } from 'src/module/user/dto/update-user.dto'
+import { NoDataError } from 'src/type/error/Common'
 import { encryptPassword } from 'src/util/PasswordEncrypt'
 import { EntityRepository, Repository } from 'typeorm'
 
@@ -27,7 +29,7 @@ export class UserRepository extends Repository<User> {
   }
 
   /**
-   * 내 정보 조회
+   * 유저 정보 조회
    * @param userId `number`
    * @returns `Promise<User | undefined>`
    */
@@ -35,5 +37,33 @@ export class UserRepository extends Repository<User> {
     return this.findOne({
       where: { id }
     })
+  }
+
+  /**
+   * 유저 정보 수정
+   * @param id `number`
+   * @param body `UpdateUserBodyDto`
+   * @returns `Promise<User>`
+   */
+  updateUser = async (id: number, body: UpdateUserBodyDto): Promise<User> => {
+    const user = await this.getUser(id)
+
+    if (!user) {
+      throw NoDataError
+    }
+
+    if (body.email) {
+      user.email = body.email
+    }
+
+    if (body.phoneNumber) {
+      user.phoneNumber = body.phoneNumber
+    }
+
+    if (body.gender) {
+      user.gender = body.gender
+    }
+
+    return this.save(user)
   }
 }

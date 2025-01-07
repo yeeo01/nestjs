@@ -1,9 +1,13 @@
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
+import { ValidationPipe } from '@nestjs/common'
 
 async function bootstrap () {
   const app = await NestFactory.create(AppModule)
+
+  // 글로벌 유효성 검사 파이프 추가
+  app.useGlobalPipes(new ValidationPipe())
 
   // Swagger 설정
   const config = new DocumentBuilder()
