@@ -1,7 +1,7 @@
 import { User } from 'src/entity/user.entity'
 import { SignupBodyDto } from 'src/module/auth/dto/signup.dto'
 import { UpdateUserBodyDto } from 'src/module/user/dto/update-user.dto'
-import { NoDataError } from 'src/type/error/Common'
+import { NoDataError } from 'src/type/error/error'
 import { encryptPassword } from 'src/util/PasswordEncrypt'
 import { EntityRepository, Repository } from 'typeorm'
 
@@ -16,16 +16,16 @@ export class UserRepository extends Repository<User> {
     // 비밀번호 암호화
     const password = await encryptPassword(body.password)
 
-    return this.save(
-      this.create({
-        signinId: body.signinId,
-        password: password,
-        name: body.name,
-        email: body.email,
-        phoneNumber: body.phoneNumber,
-        gender: body.gender
-      })
-    )
+    const user = this.create({
+      signinId: body.signinId,
+      password,
+      name: body.name,
+      email: body.email,
+      phoneNumber: body.phoneNumber,
+      gender: body.gender
+    })
+
+    return this.save(user)
   }
 
   /**

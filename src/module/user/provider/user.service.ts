@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { UserRepository } from 'src/repository/user.repository' // 수정
-import { UserResponse, convertUserResponse } from 'src/responser/user.response'
-import { NoDataError } from 'src/type/error/Common'
+import { UserResponse, convertUserResponse } from 'src/response/user.response'
+import { NoDataError } from 'src/type/error/error'
 import { UpdateUserBodyDto } from '../dto/update-user.dto'
 import { Connection } from 'typeorm'
 import { User } from 'src/entity/user.entity'

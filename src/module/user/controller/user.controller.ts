@@ -6,8 +6,8 @@ import {
 } from '@nestjs/swagger'
 import { Body, Controller, Get, Param, Patch, Query } from '@nestjs/common'
 import { UserService } from '../provider/user.service'
-import { UserResponse } from 'src/responser/user.response'
-import { InsufficientScope } from 'src/type/error/Common'
+import { UserResponse } from 'src/response/user.response'
+import { InsufficientScope } from 'src/type/error/error'
 import { UpdateUserBodyDto } from '../dto/update-user.dto'
 
 @ApiTags('User')
