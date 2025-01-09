@@ -6,7 +6,7 @@ import { UserRepository } from 'src/repository/user.repository'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { SignupBodyDto } from '../dto/signup.dto'
 import { db } from 'src/config/db.config'
-import { UserResponse } from 'src/responser/user.response'
+import { UserResponse } from 'src/response/user.response'
 
 describe('AuthController', () => {
   let app: TestingModule
