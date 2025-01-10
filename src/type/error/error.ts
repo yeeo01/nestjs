@@ -14,6 +14,12 @@ export const InsufficientScope: ICommonError = {
   message: { ko: '권한이 없습니다' }
 }
 
+export const InvalidPasswordError: ICommonError = {
+  status: 401,
+  code: 'Auth-002',
+  message: { ko: '비밀번호가 일치하지 않습니다.' }
+}
+
 // User Errors: 사용자 관련 에러들
 export const DuplicateIdError: ICommonError = {
   status: 409,

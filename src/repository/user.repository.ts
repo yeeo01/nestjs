@@ -40,6 +40,15 @@ export class UserRepository extends Repository<User> {
   }
 
   /**
+   * signinId로 유저 조회
+   * @param signinId `string`
+   * @returns `Promise<User | undefined>`
+   */
+  getUserBySigninId = async (signinId: string): Promise<User | undefined> => {
+    return this.findOne({ where: { signinId } })
+  }
+
+  /**
    * 유저 정보 수정
    * @param id `number`
    * @param body `UpdateUserBodyDto`
