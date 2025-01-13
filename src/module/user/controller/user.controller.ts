@@ -4,11 +4,12 @@ import {
   ApiOperation,
   ApiTags
 } from '@nestjs/swagger'
-import { Body, Controller, Get, Param, Patch, Query } from '@nestjs/common'
+import { Controller, Get, Patch, Body, Req, UseGuards } from '@nestjs/common'
 import { UserService } from '../provider/user.service'
 import { UserResponse } from 'src/response/user.response'
 import { InsufficientScope } from 'src/type/error/error'
 import { UpdateUserBodyDto } from '../dto/update-user.dto'
+import { AuthGuard } from '@nestjs/passport'
 
 @ApiTags('User')
 @ApiBearerAuth()
@@ -26,8 +27,11 @@ export class UserController {
     description: 'User Info',
     type: UserResponse
   })
+  @UseGuards(AuthGuard('jwt'))
   @Get('/:userId')
-  getUserController (@Param('userId') userId: number) {
+  getUserController (@Req() req) {
+    const userId = req.user.userId
+
     if (!userId) {
       throw InsufficientScope
     }
@@ -42,11 +46,11 @@ export class UserController {
     description: 'User Info Update',
     type: UserResponse
   })
+  @UseGuards(AuthGuard('jwt'))
   @Patch('/:userId')
-  patchUserController (
-    @Param('userId') userId: number,
-    @Body() body: UpdateUserBodyDto
-  ) {
+  patchUserController (@Req() req, @Body() body: UpdateUserBodyDto) {
+    const userId = req.user.userId
+
     if (!userId) {
       throw InsufficientScope
     }
