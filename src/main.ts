@@ -13,6 +13,7 @@ async function bootstrap () {
   const config = new DocumentBuilder()
     .setTitle('Yejin-Nest')
     .setDescription('Yejin-Nest-Learning')
+    .addBearerAuth()
     .addTag('Auth', '인증')
     .addTag('User', '사용자')
     .build()
