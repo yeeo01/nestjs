@@ -17,7 +17,7 @@ describe('UserController', () => {
         ConfigModule.forRoot({
           isGlobal: true
         }),
-        TypeOrmModule.forRootAsync(db([__dirname])),
+        TypeOrmModule.forRootAsync(db([process.env.PWD ?? '', '/src'])),
         UserModule
       ]
     }).compile()

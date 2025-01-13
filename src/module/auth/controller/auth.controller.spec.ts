@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { ConfigModule, ConfigService } from '@nestjs/config'
+import { ConfigModule } from '@nestjs/config'
 import { AuthModule } from '../auth.module'
 import { AuthController } from './auth.controller'
 import { UserRepository } from 'src/repository/user.repository'
@@ -21,7 +21,7 @@ describe('AuthController', () => {
         ConfigModule.forRoot({
           isGlobal: true
         }),
-        TypeOrmModule.forRootAsync(db([__dirname])),
+        TypeOrmModule.forRootAsync(db([process.env.PWD ?? '', '/src'])),
         AuthModule
       ]
     }).compile()
