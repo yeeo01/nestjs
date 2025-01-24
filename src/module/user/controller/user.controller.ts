@@ -10,6 +10,7 @@ import { UserResponse } from 'src/response/user.response'
 import { InsufficientScope } from 'src/type/error/error'
 import { UpdateUserBodyDto } from '../dto/update-user.dto'
 import { AuthGuard } from '@nestjs/passport'
+import { ChangePasswordDto } from '../dto/change-password.dto'
 
 @ApiTags('User')
 @ApiBearerAuth()
@@ -28,7 +29,7 @@ export class UserController {
     type: UserResponse
   })
   @UseGuards(AuthGuard('jwt'))
-  @Get('/:userId')
+  @Get()
   getUserController (@Req() req) {
     const userId = req.user.userId
 
@@ -47,7 +48,7 @@ export class UserController {
     type: UserResponse
   })
   @UseGuards(AuthGuard('jwt'))
-  @Patch('/:userId')
+  @Patch()
   patchUserController (@Req() req, @Body() body: UpdateUserBodyDto) {
     const userId = req.user.userId
 
@@ -56,5 +57,24 @@ export class UserController {
     }
 
     return this.userService.updateUser(userId, body)
+  }
+
+  @ApiOperation({
+    summary: '비밀번호 변경'
+  })
+  @ApiOkResponse({
+    description: 'Password changed successfully',
+    type: String
+  })
+  @UseGuards(AuthGuard('jwt'))
+  @Patch('change-password')
+  changePasswordController (@Req() req, @Body() body: ChangePasswordDto) {
+    const userId = req.user.userId
+
+    if (!userId) {
+      throw InsufficientScope
+    }
+
+    return this.userService.changePassword(userId, body)
   }
 }

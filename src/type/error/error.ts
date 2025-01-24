@@ -32,6 +32,12 @@ export const InvalidPasswordError: ICommonError = {
   message: { ko: '비밀번호가 일치하지 않습니다.' }
 }
 
+export const PasswordMismatchError: ICommonError = {
+  status: 400,
+  code: 'Auth-005',
+  message: { ko: '새 비밀번호와 확인 비밀번호가 일치하지 않습니다.' }
+}
+
 // User Errors: 사용자 관련 에러들
 export const DuplicateIdError: ICommonError = {
   status: 409,

@@ -75,4 +75,24 @@ export class UserRepository extends Repository<User> {
 
     return this.save(user)
   }
+
+  /**
+   * 비밀번호 변경
+   * @param id `number`
+   * @param password `string`
+   * @returns `Promise<User>`
+   */
+  changePassword = async (id: number, password: string): Promise<User> => {
+    const user = await this.getUser(id)
+
+    if (!user) {
+      throw NoDataError
+    }
+
+    const newPassword = await encryptPassword(password)
+
+    user.password = newPassword
+
+    return this.save(user)
+  }
 }
