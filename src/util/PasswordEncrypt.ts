@@ -5,6 +5,19 @@ import bcrypt from 'bcrypt'
  * @param password `string`
  * @returns `Promise<string>`
  */
-export async function encryptPassword (password: string) {
+export const encryptPassword = async (password: string): Promise<string> => {
   return bcrypt.hashSync(password, 10)
+}
+
+/**
+ * 비밀번호 비교
+ * @param password `string`
+ * @param hashedPassword `string`
+ * @returns `Promise<boolean>`
+ */
+export const comparePassword = async (
+  password: string,
+  hashedPassword: string
+): Promise<boolean> => {
+  return bcrypt.compare(password, hashedPassword)
 }
