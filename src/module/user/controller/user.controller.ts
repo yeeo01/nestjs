@@ -11,6 +11,7 @@ import { InsufficientScope } from 'src/type/error/error'
 import { UpdateUserBodyDto } from '../dto/update-user.dto'
 import { AuthGuard } from '@nestjs/passport'
 import { ChangePasswordDto } from '../dto/change-password.dto'
+import { CurrentSafeUser } from 'src/decorator/current-safe-user'
 
 @ApiTags('User')
 @ApiBearerAuth()
@@ -30,13 +31,7 @@ export class UserController {
   })
   @UseGuards(AuthGuard('jwt'))
   @Get()
-  getUserController (@Req() req) {
-    const userId = req.user.userId
-
-    if (!userId) {
-      throw InsufficientScope
-    }
-
+  getUserController (@CurrentSafeUser() userId: number) {
     return this.userService.getUser(userId)
   }
 
@@ -49,13 +44,10 @@ export class UserController {
   })
   @UseGuards(AuthGuard('jwt'))
   @Patch()
-  patchUserController (@Req() req, @Body() body: UpdateUserBodyDto) {
-    const userId = req.user.userId
-
-    if (!userId) {
-      throw InsufficientScope
-    }
-
+  patchUserController (
+    @CurrentSafeUser() userId: number,
+    @Body() body: UpdateUserBodyDto
+  ) {
     return this.userService.updateUser(userId, body)
   }
 
@@ -68,13 +60,10 @@ export class UserController {
   })
   @UseGuards(AuthGuard('jwt'))
   @Patch('change-password')
-  changePasswordController (@Req() req, @Body() body: ChangePasswordDto) {
-    const userId = req.user.userId
-
-    if (!userId) {
-      throw InsufficientScope
-    }
-
+  changePasswordController (
+    @CurrentSafeUser() userId: number,
+    @Body() body: ChangePasswordDto
+  ) {
     return this.userService.changePassword(userId, body)
   }
 }
