@@ -100,4 +100,19 @@ export class UserService {
 
     return updateUser
   }
+
+  /**
+   * 유저 탈퇴
+   * @param userId `number`
+   * @returns `Promise<string>`
+   */
+  deleteUser = async (userId: number) => {
+    return this.connection.transaction(async (manager) => {
+      await manager.getCustomRepository(UserRepository).softDelete({
+        id: userId
+      })
+
+      return 'ok'
+    })
+  }
 }

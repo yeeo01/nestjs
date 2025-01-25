@@ -4,7 +4,15 @@ import {
   ApiOperation,
   ApiTags
 } from '@nestjs/swagger'
-import { Controller, Get, Patch, Body, Req, UseGuards } from '@nestjs/common'
+import {
+  Controller,
+  Get,
+  Patch,
+  Body,
+  Req,
+  UseGuards,
+  Delete
+} from '@nestjs/common'
 import { UserService } from '../provider/user.service'
 import { UserResponse } from 'src/response/user.response'
 import { InsufficientScope } from 'src/type/error/error'
@@ -65,5 +73,18 @@ export class UserController {
     @Body() body: ChangePasswordDto
   ) {
     return this.userService.changePassword(userId, body)
+  }
+
+  @ApiOperation({
+    summary: '회원 탈퇴'
+  })
+  @ApiOkResponse({
+    description: 'User successfully soft deleted',
+    type: String
+  })
+  @UseGuards(AuthGuard('jwt'))
+  @Delete()
+  deleteUserController (@CurrentSafeUser() userId: number) {
+    return this.userService.deleteUser(userId)
   }
 }
