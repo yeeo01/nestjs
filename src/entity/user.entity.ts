@@ -5,8 +5,10 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  DeleteDateColumn
+  DeleteDateColumn,
+  OneToMany
 } from 'typeorm'
+import { Media } from './media.entity'
 
 @Entity('user', { schema: 'yejin' })
 export class User {
@@ -30,7 +32,7 @@ export class User {
   })
     email: string | null
 
-  @Column('varchar', { name: 'phone_number', nullable: true, length: 100 })
+  @Column('varchar', { name: 'phone_number', nullable: true, length: 30 })
     phoneNumber: string | null
 
   @Column('varchar', { name: 'gender', nullable: true, length: 45 })
@@ -44,4 +46,7 @@ export class User {
 
   @DeleteDateColumn()
     deletedAt: Date | null
+
+  @OneToMany(() => Media, (media) => media.user)
+    media: Media[]
 }

@@ -16,6 +16,7 @@ async function bootstrap () {
     .addBearerAuth()
     .addTag('Auth', '인증')
     .addTag('User', '사용자')
+    .addTag('Media', '미디어')
     .build()
 
   const document = SwaggerModule.createDocument(app, config)
