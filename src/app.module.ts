@@ -6,6 +6,7 @@ import { UserModule } from './module/user/user.module'
 import { AuthModule } from './module/auth/auth.module'
 import { APP_FILTER } from '@nestjs/core'
 import { AllExceptionsFilter } from './util/all-exceptions.filter'
+import { MediaModule } from './module/media/media.module'
 
 @Module({
   imports: [
@@ -14,7 +15,8 @@ import { AllExceptionsFilter } from './util/all-exceptions.filter'
     }),
     TypeOrmModule.forRootAsync(db([__dirname])),
     AuthModule,
-    UserModule
+    UserModule,
+    MediaModule
   ],
   providers: [
     {
