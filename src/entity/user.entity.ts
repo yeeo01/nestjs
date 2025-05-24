@@ -9,6 +9,7 @@ import {
   OneToMany
 } from 'typeorm'
 import { Media } from './media.entity'
+import { UserToken } from './user-token.entity'
 
 @Entity('user', { schema: 'yejin' })
 export class User {
@@ -49,4 +50,7 @@ export class User {
 
   @OneToMany(() => Media, (media) => media.user)
     media: Media[]
+
+  @OneToMany(() => UserToken, (ut) => ut.user)
+    userTokens: UserToken[]
 }
