@@ -15,14 +15,50 @@ import {
   convertLoginResponse,
   LoginResponse
 } from 'src/response/login.response'
+import { ConfigService } from '@nestjs/config'
+import { UserTokenRepository } from 'src/repository/user-token.repository'
+import { User } from 'src/entity/user.entity'
+import { hashRefreshToken } from 'src/util/PasswordEncrypt'
 
 @Injectable()
 export class AuthService {
   constructor (
     private readonly connection: Connection,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
     private readonly userRepository: UserRepository,
-    private readonly jwtService: JwtService
+    private readonly userTokenRepository: UserTokenRepository
   ) {}
+
+  /**
+   * JWT 토큰 생성
+   * @param user User
+   * @param type 'access' | 'refresh'
+   * @returns string JWT 토큰
+   */
+  createToken = async (
+    user: User,
+    type: 'access' | 'refresh'
+  ): Promise<string> => {
+    const payload = { userId: user.id, name: user.name }
+
+    const secret =
+      type === 'access'
+        ? this.configService.get<string>('JWT_ACCESS_SECRET')
+        : this.configService.get<string>('JWT_REFRESH_SECRET')
+
+    const expirationTimeRaw =
+      type === 'access'
+        ? this.configService.get<string>('JWT_ACCESS_EXPIRATION')
+        : this.configService.get<string>('JWT_REFRESH_EXPIRATION')
+
+    const expiresIn = Number(expirationTimeRaw)
+
+    return this.jwtService.signAsync(payload, {
+      secret,
+      expiresIn
+    })
+  }
 
   /**
    * 회원가입
@@ -70,10 +106,25 @@ export class AuthService {
       throw InvalidPasswordError
     }
 
-    // JWT 토큰 발급
-    const payload = { userId: user.id }
-    const accessToken = this.jwtService.sign(payload)
+    // access / refresh 토큰 생성
+    const accessToken = await this.createToken(user, 'access')
+    const refreshToken = await this.createToken(user, 'refresh')
 
-    return convertLoginResponse(accessToken, user)
+    const refreshExpiresIn = Number(
+      this.configService.get<string>('JWT_REFRESH_EXPIRATION')
+    )
+    const expiredAt = new Date(Date.now() + refreshExpiresIn * 1000)
+
+    // 리프레시 토큰 해싱 후 저장
+    const hashedRefreshToken = await hashRefreshToken(refreshToken)
+
+    // 리프레시 토큰 저장
+    await this.userTokenRepository.saveRefreshToken(
+      user.id,
+      hashedRefreshToken,
+      expiredAt
+    )
+
+    return convertLoginResponse(accessToken, refreshToken, user)
   }
 }

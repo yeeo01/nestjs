@@ -9,6 +9,11 @@ export class LoginResponse {
     accessToken: string
 
   @ApiProperty({
+    example: 'exampletokenvalue'
+  })
+    refreshToken: string
+
+  @ApiProperty({
     type: UserResponse
   })
     user: UserResponse
@@ -16,10 +21,12 @@ export class LoginResponse {
 
 export const convertLoginResponse = (
   accessToken: string,
+  refreshToken: string,
   user: User
 ): LoginResponse => {
   return {
     accessToken: accessToken,
+    refreshToken: refreshToken,
     user: {
       id: user.id,
       signinId: user.signinId,
